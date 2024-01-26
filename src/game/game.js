@@ -1,6 +1,6 @@
 export function Game() {
     function load() {
-
+        
     }
     
     function update(dt) {
@@ -8,7 +8,7 @@ export function Game() {
     }
 
     function draw() {
-       
+        
     }
 
     function unload() {

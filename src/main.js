@@ -1,6 +1,7 @@
 import '../env.js'
 import './polyfills.js'
 import { Game } from './game/game.js'
+import * as resourceLoader from './lib/resourceLoader.js'
 
 const screen = { width: env.SCREEN_WIDTH, height: env.SCREEN_HEIGHT }
 const renderer = { width: env.RENDERER_WIDTH, height: env.RENDERER_HEIGHT }

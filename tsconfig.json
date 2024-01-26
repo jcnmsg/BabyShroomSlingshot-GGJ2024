@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "target": "es2020",
+        "lib": [
+            "ES2020"
+        ],
+        "outDir": "./dist" 
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

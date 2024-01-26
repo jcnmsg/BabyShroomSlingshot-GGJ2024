@@ -1,0 +1,6 @@
+env.js
+dist/*
+!dist/rayjs
+node_modules
+build/*
+!build/.gitkeep

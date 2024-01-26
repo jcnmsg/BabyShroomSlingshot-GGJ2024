@@ -1,0 +1,10 @@
+globalThis.env = {
+    SCREEN_WIDTH: 1280,
+    SCREEN_HEIGHT: 720,
+    RENDERER_WIDTH: 480,
+    RENDERER_HEIGHT: 270,
+    WINDOW_RESIZABLE: true,
+    START_FULLSCREEN: false,
+    TARGET_FPS: 60,
+    HARD_PIXELS: true
+}

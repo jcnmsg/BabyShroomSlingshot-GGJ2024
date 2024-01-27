@@ -75,10 +75,11 @@ export function Game() {
             drawTexturePro(bg, new Rectangle(0, 0, bg.width, bg.height), new Rectangle(0, 0, bg.width, bg.height), new Vector2(bg.width/2, bg.height/2), 0, WHITE);
             
             if (movementPos) {
-                drawCircleLines(movementPos.x - clickOffeset.x, movementPos.y - clickOffeset.y, circleRadius, WHITE);
+                drawEllipseLines(movementPos.x - clickOffeset.x, movementPos.y - clickOffeset.y, circleRadius, circleRadius/2, WHITE);
             }
             
             player.draw();
+            
             /* drawLine(cameraTarget.x, -270*10, cameraTarget.x, 270*10, GREEN);
             drawLine(-480*10, cameraTarget.y, 480*10, cameraTarget.y, GREEN); */
         endMode2D();

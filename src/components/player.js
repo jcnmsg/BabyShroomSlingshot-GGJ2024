@@ -28,6 +28,13 @@ export function Player(p = {}) {
     }
 
     function draw() {
+        if (direction === 0) {
+            drawEllipse(parseInt(boundingBox.x) + 15, parseInt(boundingBox.y) + 68, 16, 5, getColor(0x00000044));
+        }
+        else {
+            drawEllipse(parseInt(boundingBox.x) + 20, parseInt(boundingBox.y) + 68, 16, 5, getColor(0x00000044));
+        }
+
         sprite.draw(boundingBox.x, boundingBox.y, direction);
     }
 

@@ -1,10 +1,10 @@
 import { Sprite } from "../../../components/sprite.js";
 
-export function Menu() {
+export function Menu(color = BLUE) {
 
     let sun, mousePos, hover, cursor, cursorClicking, cursorSprite;
 
-    function load() {
+    function load(callback) {
         sun = Sprite({
             sheetSize: {
                 width: 268,
@@ -23,6 +23,8 @@ export function Menu() {
 
         cursor = globalThis.res.load('img', 'cursor.png');
         cursorClicking = globalThis.res.load('img', 'cursor_clicking.png');
+
+        callback();
     }
 
     function update(dt) {
@@ -45,7 +47,12 @@ export function Menu() {
 
         if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             cursorSprite = cursorClicking;
+        }
+        else {
+            cursorSprite = cursor;
+        }
 
+        if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             if (hover == 1) {
                 
             }
@@ -53,25 +60,24 @@ export function Menu() {
                 return globalThis.closeGame();
             }
         }
-        else {
-            cursorSprite = cursor;
-        }
     }
 
     function draw() {
-        clearBackground(BLUE);
+        clearBackground(color);
         sun.draw(300, 20);
 
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Baby', new Vector2(30, 90 + 10), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Shroom', new Vector2(30, 90 + 10 + 28), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'And A Slingshot', new Vector2(30, 90 + 10 + 28 + 28), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'To the Moon', new Vector2(26, 90 + 10 + 28 + 28 + 28), 32, 0, WHITE);
+        // Logo
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Baby', new Vector2(30, 100), 32, 0, WHITE);
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Shroom', new Vector2(30, 128), 32, 0, WHITE);
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'And A Slingshot', new Vector2(30, 156), 32, 0, WHITE);
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'To the Moon', new Vector2(26, 184), 32, 0, WHITE);
 
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Play', new Vector2(30, 90 + 10 + 28 + 28 + 28 + 48), 20, 0, hover == 1 ? globalThis.colors.YELLOW : WHITE);
-
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Exit', new Vector2(100, 90 + 10 + 28 + 28 + 28 + 48), 20, 0, hover == 2 ? globalThis.colors.YELLOW : WHITE);
+        // Buttons
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Play', new Vector2(30, 232), 20, 0, hover == 1 ? globalThis.colors.YELLOW : WHITE);
+        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Exit', new Vector2(100, 232), 20, 0, hover == 2 ? globalThis.colors.YELLOW : WHITE);
     
-        drawTextureEx(cursorSprite, new Vector2(mousePos.x - 6, mousePos.y), 0, 1, WHITE);
+        // Mouse sprite
+        drawTextureEx(cursorSprite, new Vector2(parseInt(mousePos.x) - 6, parseInt(mousePos.y)), 0, 1, WHITE);
     }
 
     function unload() {

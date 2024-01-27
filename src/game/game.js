@@ -1,30 +1,24 @@
-import { Menu } from "./states/menu/menu.js";
+import { manager } from "./states/manager.js";
 
 export function Game() {
-    
-    const states = [
-        Menu()
-    ]
-
-    let currentState = 0;
-
     function load() {
         globalThis.res.load('fnt', 'MainFont.ttf');
         hideCursor();
 
-        states[currentState].load();
+        manager.setState(0);
     }
     
     function update(dt) {
-        states[currentState].update(dt);
+        manager.update(dt);
+        manager.states[manager.currentState].update(dt);
     }
 
     function draw() {
-        states[currentState].draw();
+        manager.states[manager.currentState].draw();
     }
 
     function unload() {
-        states[currentState].unload();
+       manager.states[manager.currentState].unload();
     }
 
     return {

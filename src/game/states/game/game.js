@@ -5,6 +5,7 @@ export function Game() {
     const events = new EventManager();
     const clickOffeset = new Vector2(-20, -60);
     
+    let circleRadius = 15;
     let mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos;
 
     function load(callback) {
@@ -31,10 +32,12 @@ export function Game() {
             movementPos = getScreenToWorld2D(mousePos, camera);
             movementPos.x += clickOffeset.x;
             movementPos.y += clickOffeset.y;
+            circleRadius = 15;
         }
 
         if (movementPos) {
-            // move player gradually towards movementPos at fixed speed
+            if (circleRadius > 0) circleRadius--;
+
             const speed = 2;
             const dx = movementPos.x - player.x;
             const dy = movementPos.y - player.y;
@@ -47,6 +50,7 @@ export function Game() {
             if (dist < 2) {
                 movementPos = null;
                 player.walking = false;
+                circleRadius = 15;
             }
 
             if (dx > 0) {
@@ -65,13 +69,13 @@ export function Game() {
     }
 
     function draw() {
-        clearBackground(globalThis.colors.GREEN);
+        clearBackground(BLACK);
 
         beginMode2D(camera);
             drawTexturePro(bg, new Rectangle(0, 0, bg.width, bg.height), new Rectangle(0, 0, bg.width, bg.height), new Vector2(bg.width/2, bg.height/2), 0, WHITE);
             
             if (movementPos) {
-                drawCircleLines(movementPos.x - clickOffeset.x, movementPos.y - clickOffeset.y, 15, WHITE);
+                drawCircleLines(movementPos.x - clickOffeset.x, movementPos.y - clickOffeset.y, circleRadius, WHITE);
             }
             
             player.draw();

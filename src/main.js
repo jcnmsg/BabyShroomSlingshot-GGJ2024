@@ -29,7 +29,8 @@ const game = new Game();
 game.load();
 
 globalThis.getMousePositionRelativeToTexture = () => {
-    return new Vector2(getMousePosition().x/globalThis.scaleFactor, getMousePosition().y/globalThis.scaleFactor);
+    const mousePos = getMousePosition();
+    return new Vector2(mousePos.x/globalThis.scaleFactor, mousePos.y/globalThis.scaleFactor);
 }
 
 globalThis.closeGame = () => {

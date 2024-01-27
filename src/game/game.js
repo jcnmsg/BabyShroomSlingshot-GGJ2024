@@ -10,15 +10,21 @@ export function Game() {
     
     function update(dt) {
         manager.update(dt);
-        manager.states[manager.currentState].update(dt);
+
+        if (isKeyPressed(KEY_RIGHT)) {
+            manager.setState(manager.currentState+1);
+        }
+        else if (isKeyPressed(KEY_LEFT)) {
+            manager.setState(manager.currentState-1);
+        }
     }
 
     function draw() {
-        manager.states[manager.currentState].draw();
+        manager.draw();
     }
 
     function unload() {
-       manager.states[manager.currentState].unload();
+       manager.unload();
     }
 
     return {

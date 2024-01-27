@@ -85,9 +85,9 @@ export function Menu(color = BLUE) {
     function draw() {
         clearBackground(color);
 
-        if (unloaded) return;
+        if (unloaded) return drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
 
-        sun.draw(300, 20 - unloadCounter);
+        sun.draw(300, 40 - unloadCounter);
 
         // Logo
         drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Baby', new Vector2(30, 100 - unloadCounter), 32, 2, WHITE);
@@ -100,7 +100,7 @@ export function Menu(color = BLUE) {
         drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232 - unloadCounter), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
 
         // Mouse sprite
-        drawTextureEx(cursorSprite, new Vector2(parseInt(mousePos.x) - 6, parseInt(mousePos.y)), 0, 1, WHITE);
+        drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
     }
 
     function unload(callback) {

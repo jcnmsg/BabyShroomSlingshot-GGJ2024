@@ -14,6 +14,7 @@ export function Game() {
 
     function draw() {
         manager.draw();
+        //drawFPS(0, 0);
     }
 
     function unload() {

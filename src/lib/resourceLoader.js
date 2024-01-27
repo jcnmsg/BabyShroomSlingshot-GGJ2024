@@ -8,6 +8,8 @@ globalThis.res = {
 }
 
 function load(type, name) {
+    if (globalThis.res[type][name]) return globalThis.res[type][name];
+    
     switch (type) {
         case 'img':
             globalThis.res.img[name] = loadTexture(`../res/img/${name}`);

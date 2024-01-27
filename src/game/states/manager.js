@@ -1,4 +1,5 @@
 import { Menu } from "./menu/menu.js";
+import { Game } from "./game/game.js";
 
 let loadState = 0;
 let unloadState = -1;
@@ -7,18 +8,21 @@ let unloadNextTick;
 
 const states = [
     Menu(),
-    Menu(YELLOW),
-    Menu(RED),
+    Game(),
 ]
 
 function setState(s) {
     if (currentState != s) {
         loadState = s;
     }
+
+    states[currentState]?.off('change-state');
 }
 
 function loadedCallback() {
     currentState = loadState;
+
+    states[currentState].on('change-state', setState);
 
     return states[currentState];
 }

@@ -1,9 +1,11 @@
 import { Sprite } from "../../../components/sprite.js";
+import { EventManager } from "../../../lib/eventManager.js";
 
 export function Menu(color = BLUE) {
 
+    const events = new EventManager();
     const finalUnloadingY = 260;
-    let sun, mousePos, hover, cursor, cursorClicking, cursorSprite, unloading, unloadingCb;
+    let sun, mousePos, hover, cursor, cursorClicking, cursorSprite, unloading, unloadingCb, unloaded;
     let unloadCounter = 0;
 
     function load(callback) {
@@ -34,45 +36,47 @@ export function Menu(color = BLUE) {
 
         mousePos = globalThis.getMousePositionRelativeToTexture();
 
-        const playSize = measureTextEx(globalThis.res.fnt['MainFont.ttf'], 'Play', 20, 0);
-        const exitSize = measureTextEx(globalThis.res.fnt['MainFont.ttf'], 'Exit', 20, 0);
+        if (!unloading) {
+            const playSize = measureTextEx(globalThis.res.fnt['mainfont.fnt'], 'Play', 20, 2);
+            const exitSize = measureTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', 20, 2);
 
-        if (checkCollisionPointRec(mousePos, new Rectangle(30, 232, playSize.x, playSize.y))) {
-            hover = 1;
-        }
-        else if (checkCollisionPointRec(mousePos, new Rectangle(100, 232, exitSize.x, exitSize.y))) {
-            hover = 2;
-        }
-        else {
-            hover = 0;
-        }
-
-        if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            cursorSprite = cursorClicking;
-        }
-        else {
-            cursorSprite = cursor;
-        }
-
-        if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-            if (hover == 1) {
-                
+            if (checkCollisionPointRec(mousePos, new Rectangle(30, 232, playSize.x, playSize.y))) {
+                hover = 1;
             }
-            else if (hover == 2) {
-                return globalThis.closeGame();
+            else if (checkCollisionPointRec(mousePos, new Rectangle(110, 232, exitSize.x, exitSize.y))) {
+                hover = 2;
             }
-        }
+            else {
+                hover = 0;
+            }
 
-        if (unloading) {
-            unloadCounter+=90*dt;
+            if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                cursorSprite = cursorClicking;
+            }
+            else {
+                cursorSprite = cursor;
+            }
+
+            if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                if (hover == 1) {
+                    events.dispatch('change-state', 1);
+                }
+                else if (hover == 2) {
+                    return globalThis.closeGame();
+                }
+            }
+        } 
+        else if (unloading) {
+            unloadCounter += 100 * dt;
 
             if (unloadCounter >= finalUnloadingY) {
                 let cb = unloadingCb;
-                
+
+                unloaded = true;
                 unloading = false;
                 unloadingCb = null;
                 unloadCounter = 0;
-                
+
                 return cb();
             }
         }
@@ -80,24 +84,27 @@ export function Menu(color = BLUE) {
 
     function draw() {
         clearBackground(color);
+
+        if (unloaded) return;
+
         sun.draw(300, 20 - unloadCounter);
 
         // Logo
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Baby', new Vector2(30, 100 - unloadCounter), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'A Shroom', new Vector2(30, 128 - unloadCounter), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'And A Slingshot', new Vector2(30, 156 - unloadCounter), 32, 0, WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'To the Moon', new Vector2(26, 184 - unloadCounter), 32, 0, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Baby', new Vector2(30, 100 - unloadCounter), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Shroom', new Vector2(30, 128 - unloadCounter), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'And A Slingshot', new Vector2(30, 156 - unloadCounter), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'To the Moon', new Vector2(26, 184 - unloadCounter), 32, 2, WHITE);
 
         // Buttons
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Play', new Vector2(30, 232 - unloadCounter), 20, 0, hover == 1 ? globalThis.colors.YELLOW : WHITE);
-        drawTextEx(globalThis.res.fnt['MainFont.ttf'], 'Exit', new Vector2(100, 232 - unloadCounter), 20, 0, hover == 2 ? globalThis.colors.YELLOW : WHITE);
-    
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Play', new Vector2(30, 232 - unloadCounter), 20, 2, hover == 1 ? globalThis.colors.YELLOW : WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232 - unloadCounter), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
+
         // Mouse sprite
         drawTextureEx(cursorSprite, new Vector2(parseInt(mousePos.x) - 6, parseInt(mousePos.y)), 0, 1, WHITE);
     }
 
     function unload(callback) {
-        unloading = true;        
+        unloading = true;
         unloadingCb = callback;
     }
 
@@ -105,6 +112,8 @@ export function Menu(color = BLUE) {
         load,
         update,
         draw,
-        unload
+        unload,
+        on: events.on,
+        off: events.off
     }
 }

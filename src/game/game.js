@@ -2,7 +2,7 @@ import { manager } from "./states/manager.js";
 
 export function Game() {
     function load() {
-        globalThis.res.load('fnt', 'MainFont.ttf');
+        globalThis.res.load('fnt', 'mainfont.fnt');
         hideCursor();
 
         manager.setState(0);
@@ -10,13 +10,6 @@ export function Game() {
     
     function update(dt) {
         manager.update(dt);
-
-        if (isKeyPressed(KEY_RIGHT)) {
-            manager.setState(manager.currentState+1);
-        }
-        else if (isKeyPressed(KEY_LEFT)) {
-            manager.setState(manager.currentState-1);
-        }
     }
 
     function draw() {

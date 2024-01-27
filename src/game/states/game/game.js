@@ -1,5 +1,8 @@
-export function Menu() {
+import { EventManager } from "../../../lib/eventManager.js";
 
+export function Game() {
+    const events = new EventManager();
+    
     function load(callback) {
         callback();
     }
@@ -10,7 +13,6 @@ export function Menu() {
 
     function draw() {
         clearBackground(BLUE);
-        
     }
 
     function unload() {
@@ -21,6 +23,8 @@ export function Menu() {
         load,
         update,
         draw,
-        unload
+        unload,
+        on: events.on,
+        off: events.off
     }
 }

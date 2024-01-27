@@ -11,7 +11,9 @@ if (env.WINDOW_RESIZABLE) setConfigFlags(FLAG_WINDOW_RESIZABLE);
 
 initWindow(screen.width, screen.height, "A baby, a shroom and a slingshot to the moon - Global Game Jam 2024 @ Satakunta");
 
-if (env.START_FULLSCREEN) toggleFullscreen();
+if (env.START_FULLSCREEN) {
+    toggleFullscreen();
+}
 
 setTargetFPS(env.TARGET_FPS);
 
@@ -60,6 +62,10 @@ while (!windowShouldClose()) {
     const tint = RAYWHITE;
 
     globalThis.scaleFactor = scaleFactor;
+
+    if (isKeyPressed(KEY_F11)) {
+        toggleFullscreen();
+    }
 
     // Draw
     beginDrawing();

@@ -5,7 +5,7 @@ export function Game() {
         globalThis.res.load('fnt', 'mainfont.fnt');
         hideCursor();
 
-        manager.setState(0);
+        manager.setState(1);
     }
     
     function update(dt) {

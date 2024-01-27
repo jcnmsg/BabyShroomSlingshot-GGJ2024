@@ -100,7 +100,7 @@ export function Menu(color = BLUE) {
         drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232 - unloadCounter), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
 
         // Mouse sprite
-        drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
+        drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);
     }
 
     function unload(callback) {

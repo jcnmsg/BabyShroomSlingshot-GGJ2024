@@ -34,15 +34,27 @@ export function Sprite(p = {}) {
         }
     }
 
-    function draw(x, y, rot = 0) {
-        drawTexturePro(
-            texture,
-            new Rectangle(props.frameSize.width * Math.floor(frame), 0, props.frameSize.width, props.frameSize.height),
-            new Rectangle(x, y, props.frameSize.width, props.frameSize.height),
-            new Vector2(0, 0),
-            rot,
-            WHITE
-        );
+    function draw(x, y, dir = 0) {
+        if (dir === 0) {
+            drawTexturePro(
+                texture,
+                new Rectangle(props.frameSize.width * Math.floor(frame), 0, props.frameSize.width, props.frameSize.height),
+                new Rectangle(x, y, props.frameSize.width, props.frameSize.height),
+                new Vector2(0, 0),
+                0,
+                WHITE
+            );
+        }
+        else if (dir === 1){ // Mirror sprite
+            drawTexturePro(
+                texture,
+                new Rectangle(props.frameSize.width * Math.floor(frame), 0, -props.frameSize.width, props.frameSize.height),
+                new Rectangle(x, y, props.frameSize.width, props.frameSize.height),
+                new Vector2(0, 0),
+                0,
+                WHITE
+            );
+        }
     }
 
     function play() {
@@ -53,10 +65,18 @@ export function Sprite(p = {}) {
         playing = false;
     }
 
+    function reset() {
+        frame = props.frameStart;
+    }
+
     return {
         update,
         draw,
         play,
-        pause
+        pause,
+        reset,
+        get playing() {
+            return playing;
+        }
     }
 }

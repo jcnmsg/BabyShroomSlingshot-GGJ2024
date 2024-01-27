@@ -3,7 +3,8 @@ globalThis.res = {
     fnt: {},
     mus: {},
     sfx: {},
-    load: load,
+    load,
+    unload
 }
 
 function load(type, name) {
@@ -20,6 +21,27 @@ function load(type, name) {
         case 'sfx': 
             globalThis.res.sfx[name] = loadSound(`../res/sfx/${name}`);
             return globalThis.res.sfx[name];
+    }
+}
+
+function unload(type, name) {
+    switch (type) {
+        case 'img':
+            unloadTexture(globalThis.res.img[name]);
+            delete globalThis.res.img[name];
+            break;
+        case 'fnt':
+            unloadFont(globalThis.res.fnt[name]);
+            delete globalThis.res.fnt[name];
+            break;
+        case 'mus':
+            unloadSound(globalThis.res.mus[name]);
+            delete globalThis.res.mus[name];
+            break;
+        case 'sfx': 
+            unloadSound(globalThis.res.sfx[name]);
+            delete globalThis.res.sfx[name];
+            break;
     }
 }
 

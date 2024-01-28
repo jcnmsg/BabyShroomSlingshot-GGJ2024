@@ -76,7 +76,7 @@ while (!windowShouldClose()) {
         // Draw to the render target
         beginTextureMode(target);
         {
-            clearBackground(RAYWHITE);
+            clearBackground(BLACK);
             game.draw();
         }
         endTextureMode();

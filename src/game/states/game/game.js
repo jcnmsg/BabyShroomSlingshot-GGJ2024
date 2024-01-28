@@ -12,7 +12,8 @@ export function Game() {
     const dialogs = [];
 
     let circleRadius = 15;
-    let finishedGame, mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos, currentlyHolding, hud, finishEntity, nailedIt;
+    let loadingX = 500;
+    let finishedGame, mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos, currentlyHolding, hud, finishEntity, nailedIt, loading;
 
     function load(callback) {
         cursor = globalThis.res.load('img', 'cursor.png');
@@ -181,6 +182,8 @@ export function Game() {
 
         hud = new HUD();
 
+        loading = true;
+
         callback();
     }
 
@@ -210,9 +213,15 @@ export function Game() {
         }
         else {
             cursorSprite = cursor;
-        }
+        }       
 
-        
+        if (loading) {
+            if (loadingX <= 0) {
+                return loading = false;
+            }
+
+            return loadingX-=10;
+        }
 
         if (dialogs.length && !dialogs[0].dismissed) {
             if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
@@ -400,6 +409,10 @@ export function Game() {
         dialogs[0]?.draw();
 
         if(!nailedIt) hud.draw();
+
+        if (loading) {
+            drawRectangle(0, 0, loadingX, 270, BLACK);
+        }
 
         // Mouse sprite
         if (!nailedIt) drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);

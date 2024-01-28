@@ -67,7 +67,7 @@ export function Menu(color = BLUE) {
             }
         }
         else if (unloading) {
-            unloadCounter += 200 * dt;
+            unloadCounter += 10;
 
             if (unloadCounter >= finalUnloadingX) {
                 let cb = unloadingCb;
@@ -83,9 +83,10 @@ export function Menu(color = BLUE) {
     }
 
     function draw() {
-        clearBackground(color);
-
-        if (unloaded) return drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
+        if (!unloaded) clearBackground(color);
+        else {
+            return drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
+        }
 
         sun.draw(300, 40);
 

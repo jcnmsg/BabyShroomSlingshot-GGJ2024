@@ -24,6 +24,9 @@ export function Game() {
             img: 'tennisball.png',
             boundingBox: new Rectangle(-257, -200, 17, 16),
             hud: 'hud_ball.png',
+            dialogs: ['\n   Small ball...'],
+            endDialogInverted: true,
+            dialogPortrait: 'baby-portrait.png',
         }));
 
         objects.push(new GameObject({
@@ -32,7 +35,10 @@ export function Game() {
             requires: 1,
             pickable: true,
             usable: false,
-            hud: 'hud_scissors.png'
+            hud: 'hud_scissors.png',
+            dialogs: [' The bastard was \n sitting on the \n scissors...'],
+            endDialogInverted: true,
+            dialogPortrait: 'baby-portrait.png',
         }));
 
         objects.push(new GameObject({
@@ -70,7 +76,7 @@ export function Game() {
 
         objects.push(new GameObject({
             name: 'cat',
-            img: 'cat.png',
+            img: 'cat-left.png',
             boundingBox: new Rectangle(-307, -106, 56, 66),
             requires: 1,
             pickable: false,
@@ -101,7 +107,10 @@ export function Game() {
                     img: 'hammer.png',
                     boundingBox: new Rectangle(-424, -87, 36, 24),
                     pickable: true,
-                    hud: 'hud_hammer.png'
+                    hud: 'hud_hammer.png',
+                    dialogs: ['    One baby \n  One hammer... \n   huehuehue'],
+                    endDialogInverted: true,
+                    dialogPortrait: 'baby-portrait.png',
                 }));
             }
         }));
@@ -125,7 +134,7 @@ export function Game() {
             boundingBox: new Rectangle(-83, -485, 266, 236),
             pickable: false,
             requires: 'hammer',
-            endDialog: "     Nailed it! \n     Literally...",
+            endDialog: "     Nailed it! \n    Literally...",
             endDialogInverted: true,
             dialogPortrait: 'baby-portrait.png', 
             doneFn: () => {
@@ -215,6 +224,10 @@ export function Game() {
                         collidingObj.pick();
                         currentlyHolding = collidingObj;
                         hud.update(currentlyHolding.hud);
+
+                        if (collidingObj.endDialogInverted) {
+                            triggeredDialog = collidingObj.randomDialog();
+                        }
                     }
                     else {
                         console.log(currentlyHolding?.name);
@@ -344,7 +357,7 @@ export function Game() {
 
         // Mouse sprite
         drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);
-        /* drawText(`x ${objects[5].x}, y ${objects[5].y}`, 80, 80, 10, WHITE); */
+        /* drawText(`x ${player.x}, y ${player.y}`, 80, 80, 10, WHITE);  */
     }
 
     function unload() {

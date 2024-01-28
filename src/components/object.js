@@ -28,6 +28,8 @@ export function GameObject(p = {}) {
     }
 
     function pick() {
+        if(picked || done) return;
+        
         if (props.pickable) picked = true;
     }
 

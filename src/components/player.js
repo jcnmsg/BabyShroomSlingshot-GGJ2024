@@ -2,7 +2,7 @@ import { Sprite } from "./sprite.js";
 
 export function Player(p = {}) {
 
-    const boundingBox = new Rectangle(0, 0, 35, 70);
+    const boundingBox = new Rectangle(-367, -119, 35, 70);
     const sprite = new Sprite({
         sheetSize: {
             width: 210,

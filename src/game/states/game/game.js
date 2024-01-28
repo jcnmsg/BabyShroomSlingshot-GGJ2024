@@ -50,15 +50,8 @@ export function Game() {
         }));
 
         objects.push(new GameObject({
-            img: 'lawnmower.png',
-            boundingBox: new Rectangle(491, -137, 274, 223),
-            pickable: false,
-            usable: true
-        }));
-
-        objects.push(new GameObject({
             img: 'doghouse.png',
-            boundingBox: new Rectangle(-369, -289, 107, 125),
+            boundingBox: new Rectangle(643, -111, 107, 125),
             pickable: false,
             usable: false
         }));
@@ -67,19 +60,57 @@ export function Game() {
             img: 'balls.png',
             boundingBox: new Rectangle(233, -322, 38, 43),
             pickable: false,
-            usable: false
+            requires: 1,
+            dialogs: [
+                '  What can I do \n   with these \n   big balls?',
+            ],
+            endDialogInverted: true,
+            dialogPortrait: 'baby-portrait.png'
         }));
 
         objects.push(new GameObject({
+            name: 'cat',
             img: 'cat.png',
-            boundingBox: new Rectangle(-367, -156, 56, 66),
+            boundingBox: new Rectangle(-307, -106, 56, 66),
             requires: 1,
             pickable: false,
-            usable: false,
             dialogs: [
                 '\n       Meow!',
             ],
             dialogPortrait: 'cat-portrait.png'
+        }));
+
+        objects.push(new GameObject({
+            img: 'drying-rack-box.png',
+            boundingBox: new Rectangle(-516, -249, 121, 218),
+            requires: objects[1],
+            pickable: false,
+            endDialog: " Who the hell\n leaves a toolbox \n on a drying rack?!",
+            endDialogInverted: true,
+            dialogPortrait: 'baby-portrait.png',
+            doneFn: () => {
+                objects.push(new GameObject({
+                    img: 'drying-rack-cut.png',
+                    boundingBox: new Rectangle(-516, -249, 121, 218),
+                    pickable: false,
+                    ignore: true,
+                }));
+
+                objects.push(new GameObject({
+                    name: 'hammer',
+                    img: 'hammer.png',
+                    boundingBox: new Rectangle(-424, -87, 36, 24),
+                    pickable: true,
+                    hud: 'hud_hammer.png'
+                }));
+            }
+        }));
+
+        objects.push(new GameObject({
+            img: 'drying-rack.png',
+            boundingBox: new Rectangle(-408, -315, 121, 218),
+            pickable: false,
+            ignore: true
         }));
 
         objects.push(GameObject({
@@ -87,15 +118,24 @@ export function Game() {
             boundingBox: new Rectangle(-91, -99, 956, 623),
             pickable: false,
             ignore: true,
-            usable: false
         }));
 
         objects.push(GameObject({
             img: 'swing.png',
             boundingBox: new Rectangle(-83, -485, 266, 236),
             pickable: false,
-            ignore: true,
-            usable: false
+            requires: 'hammer',
+            endDialog: "     Nailed it! \n     Literally...",
+            endDialogInverted: true,
+            dialogPortrait: 'baby-portrait.png', 
+            doneFn: () => {
+                objects.push(new GameObject({
+                    img: 'swing-big.png',
+                    boundingBox: new Rectangle(-83, -485, 261, 757),
+                    pickable: false,
+                    ignore: true,
+                }));
+            }
         }));
 
         objects.push(new GameObject({
@@ -116,16 +156,16 @@ export function Game() {
 
         // Place objects, remove after debug
         /* if (isKeyDown(KEY_LEFT)) {
-            objects[objects.length - 1].x--;
+            objects[5].x--;
         }
         if (isKeyDown(KEY_RIGHT)) {
-            objects[objects.length - 1].x++;
+            objects[5].x++;
         }
         if (isKeyDown(KEY_UP)) {
-            objects[objects.length - 1].y--;
+            objects[5].y--;
         }
         if (isKeyDown(KEY_DOWN)) {
-            objects[objects.length - 1].y++;
+            objects[5].y++;
         } */
 
         if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -177,14 +217,14 @@ export function Game() {
                         hud.update(currentlyHolding.hud);
                     }
                     else {
-                        if (collidingObj.talk(currentlyHolding)) {
+                        console.log(currentlyHolding?.name);
+                        if (collidingObj.talk(currentlyHolding) || collidingObj.talk(currentlyHolding?.name)) {
                             triggeredDialog = collidingObj.endDialog;
                         }
                         else {
                             triggeredDialog = collidingObj.randomDialog();
                         }
                     }
-
                 }
 
                 movementPos = getScreenToWorld2D(mousePos, camera);
@@ -244,22 +284,25 @@ export function Game() {
             cameraTarget = new Vector2(player.x + 20, player.y + 20);
             camera.target = cameraTarget;
 
-           /*  camera.zoom += (getMouseWheelMove() * 0.05);
+            /* camera.zoom += (getMouseWheelMove() * 0.05);
             camera.zoom = clamp(camera.zoom, 0.8, 1.5); */
 
             if (triggeredDialog && !dialogs.length) {
                 dialogs.push(new Dialog({
                     text: triggeredDialog,
                     image: collidingObj.dialogPortrait,
-                    inverted: true,
+                    inverted: collidingObj.endDialogInverted ? false : true,
                 }));
 
-                if (collidingObj.endDialog === triggeredDialog) {
+                if (collidingObj.endDialog === triggeredDialog && triggeredDialog.toLowerCase().includes('my ball')) {
                     dialogs.push(new Dialog({
                         text: '\n  Aight, fetch!!',
                         image: globalThis.res.load('img', 'baby-portrait.png'),
                     }));
 
+                    finishEntity = collidingObj;
+                }
+                else if (collidingObj.endDialog === triggeredDialog) {
                     finishEntity = collidingObj;
                 }
             }
@@ -301,7 +344,7 @@ export function Game() {
 
         // Mouse sprite
         drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);
-        //drawText(`x ${player.x}, y ${player.y}`, 80, 80, 10, WHITE);
+        /* drawText(`x ${objects[5].x}, y ${objects[5].y}`, 80, 80, 10, WHITE); */
     }
 
     function unload() {

@@ -1,6 +1,7 @@
 export function GameObject(p = {}) {
 
     const props = {
+        name: '',
         boundingBox: null,
         img: null,
         pickable: true,
@@ -40,6 +41,7 @@ export function GameObject(p = {}) {
 
     function setDone() {
         done = true;
+        props.doneFn?.();
     }
 
     return {
@@ -77,6 +79,9 @@ export function GameObject(p = {}) {
         get endDialog() {
             return props.endDialog;
         },
+        get endDialogInverted() {
+            return props.endDialogInverted;
+        },
         get hud() {
             return props.hud;
         },
@@ -88,6 +93,12 @@ export function GameObject(p = {}) {
         },
         get done() {
             return done;
+        },
+        get requires() {
+            props.requires
+        },
+        get name() {
+            return props.name;
         },
         setDone,
         randomDialog,

@@ -24,12 +24,12 @@ export function GameObject(p = {}) {
     }
 
     function draw() {
-        if(!picked && !done) drawTexture(texture, boundingBox.x, boundingBox.y, WHITE);
+        if((!picked && !done) || props.preventRemoval) drawTexture(texture, boundingBox.x, boundingBox.y, WHITE);
     }
 
     function pick() {
         if(picked || done) return;
-        
+
         if (props.pickable) picked = true;
     }
 
@@ -101,6 +101,9 @@ export function GameObject(p = {}) {
         },
         get name() {
             return props.name;
+        },
+        get picked() {
+            return picked;
         },
         setDone,
         randomDialog,

@@ -9,7 +9,7 @@ globalThis.res = {
 
 function load(type, name) {
     if (globalThis.res[type][name]) return globalThis.res[type][name];
-    
+
     switch (type) {
         case 'img':
             globalThis.res.img[name] = loadTexture(`../res/img/${name}`);
@@ -18,7 +18,7 @@ function load(type, name) {
             globalThis.res.fnt[name] = loadFont(`../res/fnt/${name}`);
             return globalThis.res.fnt[name];
         case 'mus':
-            globalThis.res.mus[name] = loadSound(`../res/mus/${name}`);
+            globalThis.res.mus[name] = loadMusicStream(`../res/mus/${name}`);
             return globalThis.res.mus[name];
         case 'sfx': 
             globalThis.res.sfx[name] = loadSound(`../res/sfx/${name}`);

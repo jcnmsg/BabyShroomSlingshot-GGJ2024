@@ -10,6 +10,10 @@ export function Dialog(p = {}) {
 
     const position = Vector2(20, 270 - 103);
 
+    if (typeof props.img === 'string') {
+        props.image = globalThis.res.load('img', props.img);
+    }
+
     let dismissed = false;
 
     function draw() {

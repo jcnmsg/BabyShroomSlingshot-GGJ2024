@@ -3,6 +3,7 @@ import { Player } from "../../../components/player.js";
 import { GameObject } from "../../../components/object.js";
 import { Dialog } from "../../../components/dialog.js";
 import { HUD } from "../../../components/hud.js";
+import { intro } from '../../../intro.js';
 
 export function Game() {
     const events = new EventManager();
@@ -11,7 +12,7 @@ export function Game() {
     const dialogs = [];
 
     let circleRadius = 15;
-    let mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos, currentlyHolding, hud, finishEntity;
+    let finishedGame, mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos, currentlyHolding, hud, finishEntity, nailedIt;
 
     function load(callback) {
         cursor = globalThis.res.load('img', 'cursor.png');
@@ -19,6 +20,8 @@ export function Game() {
         player = new Player();
         camera = new Camera2D(new Vector2(480 / 2.0, 270 / 2.0), new Vector2(player.x + 20.0, player.y + 20.0), 0, 1)
         bg = globalThis.res.load('img', 'bg.png');
+        
+        dialogs.push(...intro.map(d => new Dialog(d)));
 
         objects.push(new GameObject({
             img: 'tennisball.png',
@@ -36,7 +39,7 @@ export function Game() {
             pickable: true,
             usable: false,
             hud: 'hud_scissors.png',
-            dialogs: [' The bastard was \n sitting on the \n scissors...'],
+            dialogs: [' The rascal was \n sitting on the \n    scissors...'],
             endDialogInverted: true,
             dialogPortrait: 'baby-portrait.png',
         }));
@@ -134,7 +137,7 @@ export function Game() {
             boundingBox: new Rectangle(-83, -485, 266, 236),
             pickable: false,
             requires: 'hammer',
-            endDialog: "     Nailed it! \n    Literally...",
+            endDialog: "\n     Nailed it! \n    Literally...",
             endDialogInverted: true,
             dialogPortrait: 'baby-portrait.png', 
             doneFn: () => {
@@ -142,7 +145,28 @@ export function Game() {
                     img: 'swing-big.png',
                     boundingBox: new Rectangle(-83, -485, 261, 757),
                     pickable: false,
-                    ignore: true,
+                    ignore: false,
+                    requires: 'cat1',
+                    endDialog: '\n   To the moon \n    and beyond!',
+                    endDialogInverted: true,
+                    dialogPortrait: 'babycat-portrait.png',
+                    preventRemoval: true,
+                    doneFn: () => {
+                        nailedIt = true;
+                    }
+                }));
+
+                objects.find((o) => o.name === 'cat').setDone();
+
+                objects.push(new GameObject({
+                    name: 'cat1',
+                    img: 'cat-left.png',
+                    boundingBox: new Rectangle(-307, -106, 56, 66),
+                    pickable: true,
+                    hud: 'hud_caty.png',
+                    dialogs: ['\n  We ready fam?    '],
+                    endDialogInverted: true,
+                    dialogPortrait: 'baby-portrait.png',
                 }));
             }
         }));
@@ -179,10 +203,16 @@ export function Game() {
 
         if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             cursorSprite = cursorClicking;
+
+            if (finishedGame) {
+                globalThis.closeGame();
+            }
         }
         else {
             cursorSprite = cursor;
         }
+
+        
 
         if (dialogs.length && !dialogs[0].dismissed) {
             if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
@@ -205,8 +235,27 @@ export function Game() {
 
             let triggeredDialog = false;
             let collidingObj = false;
+            if (nailedIt) {
+                movementPos = Vector2(32, 200);
 
-            if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+                const dx = movementPos.x - player.x;
+                const dy = movementPos.y - player.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                player.walking = true;
+                camera.zoom += 0.005; 
+                camera.zoom = clamp(camera.zoom, 1, 1.5)
+
+                if (dist < 5) {
+                    movementPos = null;
+                    player.walking = false;
+
+                    if (camera.zoom === 1.5) {
+                        finishedGame = true;
+                    }
+                }
+            }
+            else if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 for (let obj of objects) {
                     const objPos = getWorldToScreen2D(obj.position, camera);
 
@@ -220,7 +269,7 @@ export function Game() {
                 }
                 else {
                     circleRadius = 0;
-                    if (collidingObj.pickable) {
+                    if (collidingObj.pickable && !collidingObj.done && !collidingObj.picked) {
                         collidingObj.pick();
                         currentlyHolding = collidingObj;
                         hud.update(currentlyHolding.hud);
@@ -229,8 +278,7 @@ export function Game() {
                             triggeredDialog = collidingObj.randomDialog();
                         }
                     }
-                    else {
-                        console.log(currentlyHolding?.name);
+                    else if (!collidingObj.pickable) {
                         if (collidingObj.talk(currentlyHolding) || collidingObj.talk(currentlyHolding?.name)) {
                             triggeredDialog = collidingObj.endDialog;
                         }
@@ -297,9 +345,6 @@ export function Game() {
             cameraTarget = new Vector2(player.x + 20, player.y + 20);
             camera.target = cameraTarget;
 
-            /* camera.zoom += (getMouseWheelMove() * 0.05);
-            camera.zoom = clamp(camera.zoom, 0.8, 1.5); */
-
             if (triggeredDialog && !dialogs.length) {
                 dialogs.push(new Dialog({
                     text: triggeredDialog,
@@ -353,11 +398,17 @@ export function Game() {
         endMode2D();
 
         dialogs[0]?.draw();
-        hud.draw();
+
+        if(!nailedIt) hud.draw();
 
         // Mouse sprite
-        drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);
-        /* drawText(`x ${player.x}, y ${player.y}`, 80, 80, 10, WHITE);  */
+        if (!nailedIt) drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);
+
+        if (finishedGame) {
+            drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Narrator: They didn\'t reach the moon, \nbut it was a good attempt...', new Vector2(20, 220), 14, 1, WHITE);
+        }
+
+        //drawText(`x ${player.x}, y ${player.y}`, 80, 80, 10, WHITE);  
     }
 
     function unload() {

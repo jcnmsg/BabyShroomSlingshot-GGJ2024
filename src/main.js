@@ -10,6 +10,7 @@ const renderer = { width: env.RENDERER_WIDTH, height: env.RENDERER_HEIGHT }
 if (env.WINDOW_RESIZABLE) setConfigFlags(FLAG_WINDOW_RESIZABLE);
 
 initWindow(screen.width, screen.height, "A baby, a shroom and a slingshot to the moon - Global Game Jam 2024 @ Satakunta");
+initAudioDevice();
 
 if (env.START_FULLSCREEN) {
     toggleFullscreen();

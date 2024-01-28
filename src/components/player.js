@@ -2,7 +2,7 @@ import { Sprite } from "./sprite.js";
 
 export function Player(p = {}) {
 
-    const boundingBox = new Rectangle(-367, -119, 35, 70);
+    const boundingBox = new Rectangle(-422, -63, 35, 70);
     const sprite = new Sprite({
         sheetSize: {
             width: 210,
@@ -28,12 +28,12 @@ export function Player(p = {}) {
     }
 
     function draw() {
-        /* if (direction === 0) {
+        if (direction === 0) {
             drawEllipse(parseInt(boundingBox.x) + 15, parseInt(boundingBox.y) + 68, 16, 5, getColor(0x00000044));
         }
         else {
             drawEllipse(parseInt(boundingBox.x) + 20, parseInt(boundingBox.y) + 68, 16, 5, getColor(0x00000044));
-        } */
+        }
 
         sprite.draw(boundingBox.x, boundingBox.y, direction);
     }

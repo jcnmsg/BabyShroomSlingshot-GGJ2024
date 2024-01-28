@@ -4,7 +4,7 @@ import { EventManager } from "../../../lib/eventManager.js";
 export function Menu(color = BLUE) {
 
     const events = new EventManager();
-    const finalUnloadingY = 260;
+    const finalUnloadingX = 500;
     let sun, mousePos, hover, cursor, cursorClicking, cursorSprite, unloading, unloadingCb, unloaded;
     let unloadCounter = 0;
 
@@ -65,11 +65,11 @@ export function Menu(color = BLUE) {
                     return globalThis.closeGame();
                 }
             }
-        } 
+        }
         else if (unloading) {
-            unloadCounter += 100 * dt;
+            unloadCounter += 200 * dt;
 
-            if (unloadCounter >= finalUnloadingY) {
+            if (unloadCounter >= finalUnloadingX) {
                 let cb = unloadingCb;
 
                 unloaded = true;
@@ -87,17 +87,22 @@ export function Menu(color = BLUE) {
 
         if (unloaded) return drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
 
-        sun.draw(300, 40 - unloadCounter);
+        sun.draw(300, 40);
 
         // Logo
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Baby', new Vector2(30, 100 - unloadCounter), 32, 2, WHITE);
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Shroom', new Vector2(30, 128 - unloadCounter), 32, 2, WHITE);
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'And A Slingshot', new Vector2(30, 156 - unloadCounter), 32, 2, WHITE);
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'To the Moon', new Vector2(26, 184 - unloadCounter), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Baby', new Vector2(30, 100), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'A Shroom', new Vector2(30, 128), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'And A Slingshot', new Vector2(30, 156), 32, 2, WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'To the Moon', new Vector2(26, 184), 32, 2, WHITE);
 
         // Buttons
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Play', new Vector2(30, 232 - unloadCounter), 20, 2, hover == 1 ? globalThis.colors.YELLOW : WHITE);
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232 - unloadCounter), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Play', new Vector2(30, 232), 20, 2, hover == 1 ? globalThis.colors.YELLOW : WHITE);
+        drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
+
+        // Draw rectangle that fills the screen gradually from left to right during unload
+        if (unloading) {
+            drawRectangle(0, 0, unloadCounter, getScreenHeight(), BLACK);
+        }
 
         // Mouse sprite
         drawTexture(cursorSprite, mousePos.x - 6, mousePos.y, WHITE);

@@ -12,3 +12,6 @@ Made with Raylib + QuickJS bindings ([rayjs](https://github.com/mode777/rayjs))
 ## Extra credits
 - Sunny Day Ambience.wav - 221227 @ freesound.org
 - Simple Joy.mp3 - Alexander Nakarada @ free-stock-music.com
+
+## Notes
+The Windows binary may be flagged as malware due to using NSIS for the final build. 

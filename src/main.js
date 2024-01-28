@@ -64,9 +64,9 @@ while (!windowShouldClose()) {
 
     globalThis.scaleFactor = scaleFactor;
 
-    if (isKeyPressed(KEY_F11)) {
+    /* if (isKeyPressed(KEY_F11)) {
         toggleFullscreen();
-    }
+    } */
 
     // Draw
     beginDrawing();

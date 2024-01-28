@@ -7,10 +7,7 @@ Made with Raylib + QuickJS bindings ([rayjs](https://github.com/mode777/rayjs))
 
 ## Controls
 - Left mouse click to move and interact with the world.
-
-## Utility keys 
 - ESC key closes the game;
-- F11 key toggles fullscreen on and off.
 
 ## Extra credits
 - Sunny Day Ambience.wav - 221227 @ freesound.org

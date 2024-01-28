@@ -16,8 +16,13 @@ export function HUD() {
         drawTexture(image, position.x, position.y, WHITE);
     }
 
+    function reset() {
+        image = globalThis.res.load('img', 'hud_empty.png');
+    }
+
     return {
         draw,
-        update
+        update,
+        reset
     }
 }

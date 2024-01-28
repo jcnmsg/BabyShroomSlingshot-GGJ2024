@@ -1,4 +1,4 @@
-export function Object(p = {}) {
+export function GameObject(p = {}) {
 
     const props = {
         boundingBox: null,
@@ -12,9 +12,8 @@ export function Object(p = {}) {
     }
 
     let picked = false;
+    let done = false;
 
-    console.log(props.endDialog);
-    
     const boundingBox = props.boundingBox;
     const texture = globalThis.res.load('img', props.img);
     const dialogTexture = props.dialogPortrait ? globalThis.res.load('img', props.dialogPortrait) : null;
@@ -24,7 +23,7 @@ export function Object(p = {}) {
     }
 
     function draw() {
-        if(!picked) drawTexture(texture, boundingBox.x, boundingBox.y, WHITE);
+        if(!picked && !done) drawTexture(texture, boundingBox.x, boundingBox.y, WHITE);
     }
 
     function pick() {
@@ -39,11 +38,21 @@ export function Object(p = {}) {
         return props.dialogs[Math.floor(Math.random() * props.dialogs.length)];
     }
 
+    function setDone() {
+        done = true;
+    }
+
     return {
         update,
         draw,
         pick,
         talk,
+        get x () {
+            return boundingBox.x;
+        },
+        get y () {
+            return boundingBox.y;
+        },
         set x (v) {
             boundingBox.x = v;
         },
@@ -71,6 +80,16 @@ export function Object(p = {}) {
         get hud() {
             return props.hud;
         },
+        get img() {
+            return props.img;
+        },
+        get ignore() {
+            return props.ignore;
+        },
+        get done() {
+            return done;
+        },
+        setDone,
         randomDialog,
     }
 }

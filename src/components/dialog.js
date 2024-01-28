@@ -4,6 +4,7 @@ export function Dialog(p = {}) {
         text: '',
         image: null,
         sound: null,
+        inverted: false,
         ...p
     }
 
@@ -12,8 +13,29 @@ export function Dialog(p = {}) {
     let dismissed = false;
 
     function draw() {
-        drawTexture(props.image, position.x, position.y, WHITE);
-        drawTextEx(globalThis.res.fnt['mainfont.fnt'], props.text, new Vector2(170, position.y + 28), 14, 1, BLACK);
+        //drawTexture(props.image, position.x, position.y, WHITE);
+        if (props.inverted) {
+            drawTexturePro(
+                props.image,
+                new Rectangle(0, 0, -props.image.width, props.image.height),
+                new Rectangle(100, position.y, props.image.width, props.image.height),
+                new Vector2(0, 0),
+                0,
+                WHITE
+            );
+            drawTextEx(globalThis.res.fnt['mainfont.fnt'], props.text, new Vector2(120, position.y + 28), 14, 1, BLACK);
+        }
+        else {
+            drawTexturePro(
+                props.image,
+                new Rectangle(0, 0, props.image.width, props.image.height),
+                new Rectangle(position.x, position.y, props.image.width, props.image.height),
+                new Vector2(0, 0),
+                0,
+                WHITE
+            );
+            drawTextEx(globalThis.res.fnt['mainfont.fnt'], props.text, new Vector2(170, position.y + 28), 14, 1, BLACK);
+        }
     }
 
     return {

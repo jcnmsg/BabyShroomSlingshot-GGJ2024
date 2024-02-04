@@ -3,6 +3,7 @@ export function GameObject(p = {}) {
     const props = {
         name: '',
         boundingBox: null,
+        interactableBoundingBox: null,
         img: null,
         pickable: true,
         dialogs: [],
@@ -16,6 +17,7 @@ export function GameObject(p = {}) {
     let done = false;
 
     const boundingBox = props.boundingBox;
+    const interactableBoundingBox = props.interactableBoundingBox;
     const texture = globalThis.res.load('img', props.img);
     const dialogTexture = props.dialogPortrait ? globalThis.res.load('img', props.dialogPortrait) : null;
 
@@ -69,8 +71,17 @@ export function GameObject(p = {}) {
         get box() {
             return new Vector2(boundingBox.width, boundingBox.height);
         },
+        get iboxPos() {
+            return interactableBoundingBox ? new Vector2(interactableBoundingBox.x, interactableBoundingBox.y) : false;
+        },
+        get ibox() {
+            return interactableBoundingBox ? new Vector2(interactableBoundingBox.width, interactableBoundingBox.height) : false;
+        },
         get boundingBox() {
             return boundingBox;
+        },
+        get interactableBoundingBox() {
+            return interactableBoundingBox || false;
         },
         get pickable() {
             return props.pickable;

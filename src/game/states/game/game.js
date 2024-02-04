@@ -97,6 +97,7 @@ export function Game() {
         objects.push(new GameObject({
             img: 'drying-rack-box.png',
             boundingBox: new Rectangle(-516, -249, 121, 218),
+            interactableBoundingBox: new Rectangle(-516, -249 + 69, 117, 80),
             requires: objects[1],
             pickable: false,
             endDialog: " Who the hell\n leaves a toolbox \n on a drying rack?!",
@@ -140,6 +141,7 @@ export function Game() {
         objects.push(GameObject({
             img: 'swing.png',
             boundingBox: new Rectangle(-83, -485, 266, 236),
+            interactableBoundingBox: new Rectangle(-83 + 90, -485 + 120, 88, 65),
             pickable: false,
             requires: 'hammer',
             endDialog: "\n     Nailed it! \n    Literally...",
@@ -149,6 +151,7 @@ export function Game() {
                 objects.push(new GameObject({
                     img: 'swing-big.png',
                     boundingBox: new Rectangle(-83, -485, 261, 757),
+                    interactableBoundingBox: new Rectangle(-83 + 93, -485 + 713, 80, 44),
                     pickable: false,
                     ignore: false,
                     requires: 'cat1',
@@ -275,9 +278,18 @@ export function Game() {
             }
             else if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 for (let obj of objects) {
-                    const objPos = getWorldToScreen2D(obj.position, camera);
+                    let objPos, objBox;
+                    
+                    if (obj.ibox) {
+                        objPos = getWorldToScreen2D(obj.iboxPos, camera);
+                        objBox = obj.ibox;
+                    }
+                    else {
+                        objPos = getWorldToScreen2D(obj.position, camera);
+                        objBox = obj.box;
+                    }
 
-                    if (checkCollisionPointRec(mousePos, new Rectangle(objPos.x, objPos.y, obj.box.x, obj.box.y))) {
+                    if (checkCollisionPointRec(mousePos, new Rectangle(objPos.x, objPos.y, objBox.x, objBox.y))) {
                         if (!obj.ignore && !obj.done) collidingObj = obj;
                     }
                 }

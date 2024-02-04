@@ -13,14 +13,15 @@ export function Game() {
     const objects = [];
     const dialogs = [];
     const doneFns = {
-        rackDone: function() {
+        rackDone: function () {
             objects.push(new GameObject({
                 img: 'drying-rack-cut.png',
                 boundingBox: new Rectangle(-516, -249, 121, 218),
                 pickable: false,
                 ignore: true,
+                orientation: 'dltr'
             }));
-    
+
             objects.push(new GameObject({
                 name: 'hammer',
                 img: 'hammer.png',
@@ -32,7 +33,7 @@ export function Game() {
                 dialogPortrait: 'baby-portrait.png',
             }));
         },
-        swingDone: function() {
+        swingDone: function () {
             objects.push(new GameObject({
                 img: 'swing-big.png',
                 boundingBox: new Rectangle(-83, -485, 261, 757),
@@ -48,9 +49,9 @@ export function Game() {
                     nailedIt = true;
                 }
             }));
-    
+
             objects.find((o) => o.name === 'cat').setDone();
-    
+
             objects.push(new GameObject({
                 name: 'cat1',
                 img: 'cat-left.png',
@@ -171,7 +172,7 @@ export function Game() {
             else if (isMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 for (let obj of objects) {
                     let objPos, objBox;
-                    
+
                     if (obj.ibox) {
                         objPos = getWorldToScreen2D(obj.iboxPos, camera);
                         objBox = obj.ibox;
@@ -302,7 +303,22 @@ export function Game() {
         }
 
         for (let obj of objects) {
-            if (obj.position.y + obj.box.y < player.y + player.height) {
+            if (obj.orientation === 'dltr') {
+                if (
+                    (
+                        (player.x > obj.position.x + obj.box.x/2) && 
+                        (player.y + player.height > obj.position.y + (obj.box.y*2/3))
+                    )
+                    ||
+                    (
+                        (player.x < obj.position.x + obj.box.x/2) &&
+                        (player.y + player.height > obj.position.y + obj.box.y)
+                    )
+                ) {
+                    obj.draw();
+                }
+            }
+            else if (obj.position.y + obj.box.y < player.y + player.height) {
                 obj.draw();
             }
         }
@@ -310,7 +326,22 @@ export function Game() {
         player.draw();
 
         for (let obj of objects) {
-            if (obj.position.y + obj.box.y > player.y + player.height) {
+            if (obj.orientation === 'dltr') {
+                if (
+                    (
+                        (player.x > obj.position.x + obj.box.x/2) && 
+                        (player.y + player.height <= obj.position.y + (obj.box.y*2/3))
+                    )
+                    ||
+                    (
+                        (player.x < obj.position.x + obj.box.x/2) &&
+                        (player.y + player.height <= obj.position.y + obj.box.y)
+                    ) 
+                ) {
+                    obj.draw();
+                }
+            }
+            else if (obj.position.y + obj.box.y > player.y + player.height) {
                 obj.draw();
             }
         }

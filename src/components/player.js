@@ -48,6 +48,7 @@ export function Player(p = {}) {
         get direction() { return direction },
         set direction(v) { direction = v },
         get height() { return boundingBox.height },
+        get width() { return boundingBox.width },
         get walking() {
             return sprite.playing;
         },

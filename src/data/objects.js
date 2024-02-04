@@ -34,7 +34,7 @@ export const objs = [
     },
     {
         img: 'doghouse.png',
-        boundingBox: new Rectangle(643, -111, 107, 125),
+        boundingBox: new Rectangle(643, -111, 200, 125),
         requires: 1,
         dialogs: [
             '\n  I ain\'t no dog!',
@@ -49,6 +49,7 @@ export const objs = [
         boundingBox: new Rectangle(233, -322, 38, 43),
         pickable: false,
         requires: 1,
+        orientation: 'dltr',
         dialogs: [
             '  What can I do \n   with these \n   big balls?',
         ],
@@ -70,7 +71,8 @@ export const objs = [
         img: 'drying-rack.png',
         boundingBox: new Rectangle(-408, -315, 121, 218),
         pickable: false,
-        ignore: true
+        ignore: true,
+        orientation: 'dltr'
     },
     {
         img: 'fence-near.png',
@@ -90,6 +92,7 @@ export const objs = [
         interactableBoundingBox: new Rectangle(-516, -249 + 69, 117, 80),
         requires: 'scissors',
         pickable: false,
+        orientation: 'dltr',
         dialogs: [
             "   Who the hell\n leaves a toolbox \n on a drying rack?!",
             "    An oddly \n   inconvenient\nplace for a box...",
@@ -99,6 +102,18 @@ export const objs = [
         endDialogInverted: true,
         dialogPortrait: 'baby-portrait.png',
         doneFn: 'rackDone'
+    },
+    {
+        img: 'swingbacklag-left.png',
+        boundingBox: new Rectangle(-42, -465, 24, 139),
+        pickable: false,
+        ignore: true,
+    },
+    {
+        img: 'swingbacklag-right.png',
+        boundingBox: new Rectangle(118, -465, 24, 139),
+        pickable: false,
+        ignore: true,
     },
     {
         img: 'swing.png',

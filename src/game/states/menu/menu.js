@@ -102,6 +102,8 @@ export function Menu(color = BLUE) {
         drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Play', new Vector2(30, 232), 20, 2, hover == 1 ? globalThis.colors.YELLOW : WHITE);
         drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Exit', new Vector2(110, 232), 20, 2, hover == 2 ? globalThis.colors.YELLOW : WHITE);
 
+        drawText('v1.0.1', 456, 260, 8, globalThis.colors.VERSION);
+
         // Draw rectangle that fills the screen gradually from left to right during unload
         if (unloading) {
             drawRectangle(0, 0, unloadCounter, getScreenHeight(), BLACK);

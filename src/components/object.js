@@ -116,6 +116,9 @@ export function GameObject(p = {}) {
         get picked() {
             return picked;
         },
+        get orientation() {
+            return props.orientation;
+        },
         setDone,
         randomDialog,
     }

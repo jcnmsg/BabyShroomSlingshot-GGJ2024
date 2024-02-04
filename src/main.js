@@ -8,6 +8,7 @@ const screen = { width: env.SCREEN_WIDTH, height: env.SCREEN_HEIGHT }
 const renderer = { width: env.RENDERER_WIDTH, height: env.RENDERER_HEIGHT }
 
 if (env.WINDOW_RESIZABLE) setConfigFlags(FLAG_WINDOW_RESIZABLE);
+if (env.VSYNC) setConfigFlags(FLAG_VSYNC_HINT);
 
 initWindow(screen.width, screen.height, "A baby, a shroom and a slingshot to the moon - Global Game Jam 2024 @ Satakunta");
 initAudioDevice();
@@ -80,7 +81,6 @@ while (!windowShouldClose()) {
             game.draw();
         }
         endTextureMode();
-
 
         drawTexturePro(target.texture, source, dest, origin, rotation, tint);
     }

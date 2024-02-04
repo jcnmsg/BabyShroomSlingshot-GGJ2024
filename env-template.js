@@ -6,5 +6,6 @@ globalThis.env = {
     WINDOW_RESIZABLE: true,
     START_FULLSCREEN: true,
     TARGET_FPS: 60,
-    HARD_PIXELS: true
+    HARD_PIXELS: true,
+    VSYNC: true
 }

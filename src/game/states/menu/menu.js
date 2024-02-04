@@ -83,7 +83,9 @@ export function Menu(color = BLUE) {
     }
 
     function draw() {
-        if (!unloaded) clearBackground(color);
+        if (!unloaded) {
+            clearBackground(color);
+        }
         else {
             return drawTexture(cursorSprite, parseInt(mousePos.x), parseInt(mousePos.y), WHITE);
         }

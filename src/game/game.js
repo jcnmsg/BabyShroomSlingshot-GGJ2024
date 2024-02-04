@@ -17,7 +17,7 @@ export function Game() {
         playMusicStream(globalThis.res.mus['sunny-day-ambience.wav']);
         hideCursor();
 
-        manager.setState(1);
+        manager.setState(0);
     }
     
     function update(dt) {

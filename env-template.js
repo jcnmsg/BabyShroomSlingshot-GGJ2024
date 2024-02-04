@@ -3,7 +3,7 @@ globalThis.env = {
     SCREEN_HEIGHT: getScreenHeight(),
     RENDERER_WIDTH: 480,
     RENDERER_HEIGHT: 270,
-    WINDOW_RESIZABLE: true,
+    WINDOW_RESIZABLE: false,
     START_FULLSCREEN: true,
     TARGET_FPS: 60,
     HARD_PIXELS: true,

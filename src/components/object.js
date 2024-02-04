@@ -45,7 +45,6 @@ export function GameObject(p = {}) {
 
     function setDone() {
         done = true;
-        console.log(props.doneFn)
         props.doneFn?.();
     }
 

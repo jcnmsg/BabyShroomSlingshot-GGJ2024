@@ -8,12 +8,15 @@ import { intro } from '../../../intro.js';
 export function Game() {
     const events = new EventManager();
     const clickOffset = new Vector2(-20, -60);
+    const finalUnloadingX = 500;
     const objects = [];
     const dialogs = [];
 
     let circleRadius = 15;
     let loadingX = 500;
     let finishedGame, mousePos, cursor, cursorClicking, cursorSprite, cameraTarget, player, camera, bg, movementPos, currentlyHolding, hud, finishEntity, nailedIt, loading;
+    let unloading, unloadingCb, unloaded;
+    let unloadCounter = 0;
 
     function load(callback) {
         cursor = globalThis.res.load('img', 'cursor.png');
@@ -21,7 +24,8 @@ export function Game() {
         player = new Player();
         camera = new Camera2D(new Vector2(480 / 2.0, 270 / 2.0), new Vector2(player.x + 20.0, player.y + 20.0), 0, 1)
         bg = globalThis.res.load('img', 'bg.png');
-        
+        unloaded = false;
+
         dialogs.push(...intro.map(d => new Dialog(d)));
 
         objects.push(new GameObject({
@@ -140,7 +144,7 @@ export function Game() {
             requires: 'hammer',
             endDialog: "\n     Nailed it! \n    Literally...",
             endDialogInverted: true,
-            dialogPortrait: 'baby-portrait.png', 
+            dialogPortrait: 'baby-portrait.png',
             doneFn: () => {
                 objects.push(new GameObject({
                     img: 'swing-big.png',
@@ -190,37 +194,42 @@ export function Game() {
     function update(dt) {
         mousePos = globalThis.getMousePositionRelativeToTexture();
 
-        // Place objects, remove after debug
-        /* if (isKeyDown(KEY_LEFT)) {
-            objects[5].x--;
+        if (unloading) {
+            unloadCounter += 10;
+
+            if (unloadCounter >= finalUnloadingX) {
+                let cb = unloadingCb;
+
+                unloaded = true;
+                unloading = false;
+                unloadingCb = null;
+                unloadCounter = 0;
+
+                return cb();
+            }
+
+            return;
         }
-        if (isKeyDown(KEY_RIGHT)) {
-            objects[5].x++;
-        }
-        if (isKeyDown(KEY_UP)) {
-            objects[5].y--;
-        }
-        if (isKeyDown(KEY_DOWN)) {
-            objects[5].y++;
-        } */
 
         if (isMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             cursorSprite = cursorClicking;
 
             if (finishedGame) {
-                globalThis.closeGame();
+                unload(() => {
+                    globalThis.closeGame();
+                })
             }
         }
         else {
             cursorSprite = cursor;
-        }       
+        }
 
         if (loading) {
             if (loadingX <= 0) {
                 return loading = false;
             }
 
-            return loadingX-=10;
+            return loadingX -= 10;
         }
 
         if (dialogs.length && !dialogs[0].dismissed) {
@@ -252,7 +261,7 @@ export function Game() {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 player.walking = true;
-                camera.zoom += 0.005; 
+                camera.zoom += 0.005;
                 camera.zoom = clamp(camera.zoom, 1, 1.5)
 
                 if (dist < 5) {
@@ -269,7 +278,7 @@ export function Game() {
                     const objPos = getWorldToScreen2D(obj.position, camera);
 
                     if (checkCollisionPointRec(mousePos, new Rectangle(objPos.x, objPos.y, obj.box.x, obj.box.y))) {
-                        if(!obj.ignore && !obj.done) collidingObj = obj;
+                        if (!obj.ignore && !obj.done) collidingObj = obj;
                     }
                 }
 
@@ -298,7 +307,7 @@ export function Game() {
                 }
 
                 movementPos = getScreenToWorld2D(mousePos, camera);
-                
+
                 const triangleTop = {
                     a: new Vector2(55, -462),
                     b: new Vector2(-718, -20),
@@ -383,7 +392,7 @@ export function Game() {
 
         beginMode2D(camera);
         drawTexturePro(bg, new Rectangle(0, 0, bg.width, bg.height), new Rectangle(0, 0, bg.width, bg.height), new Vector2(bg.width / 2, bg.height / 2), 0, WHITE);
-        
+
         if (movementPos) {
             drawEllipseLines(movementPos.x - clickOffset.x, movementPos.y - clickOffset.y, circleRadius, circleRadius / 2, WHITE);
         }
@@ -402,13 +411,11 @@ export function Game() {
             }
         }
 
-        /* drawTriangleLines(new Vector2(55, -462), new Vector2(-718, -20), new Vector2(819, -20), RED);
-        drawTriangleLines(new Vector2(-718, -20), new Vector2(-81, 495), new Vector2(819, -20), RED); */
         endMode2D();
 
         dialogs[0]?.draw();
 
-        if(!nailedIt) hud.draw();
+        if (!nailedIt) hud.draw();
 
         if (loading) {
             drawRectangle(0, 0, loadingX, 270, BLACK);
@@ -421,11 +428,15 @@ export function Game() {
             drawTextEx(globalThis.res.fnt['mainfont.fnt'], 'Narrator: They didn\'t reach the moon, \nbut it was a good attempt...', new Vector2(20, 220), 14, 1, WHITE);
         }
 
-        //drawText(`x ${player.x}, y ${player.y}`, 80, 80, 10, WHITE);  
+        // Draw rectangle that fills the screen gradually from left to right during unload
+        if (unloading) {
+            drawRectangle(0, 0, unloadCounter, getScreenHeight(), BLACK);
+        }
     }
 
-    function unload() {
-
+    function unload(callback) {
+        unloading = true;
+        unloadingCb = callback;
     }
 
     return {

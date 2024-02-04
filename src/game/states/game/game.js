@@ -12,6 +12,57 @@ export function Game() {
     const finalUnloadingX = 500;
     const objects = [];
     const dialogs = [];
+    const doneFns = {
+        rackDone: function() {
+            objects.push(new GameObject({
+                img: 'drying-rack-cut.png',
+                boundingBox: new Rectangle(-516, -249, 121, 218),
+                pickable: false,
+                ignore: true,
+            }));
+    
+            objects.push(new GameObject({
+                name: 'hammer',
+                img: 'hammer.png',
+                boundingBox: new Rectangle(-424, -87, 36, 24),
+                pickable: true,
+                hud: 'hud_hammer.png',
+                dialogs: ['    One baby \n  One hammer... \n   huehuehue'],
+                endDialogInverted: true,
+                dialogPortrait: 'baby-portrait.png',
+            }));
+        },
+        swingDone: function() {
+            objects.push(new GameObject({
+                img: 'swing-big.png',
+                boundingBox: new Rectangle(-83, -485, 261, 757),
+                interactableBoundingBox: new Rectangle(-83 + 93, -485 + 713, 80, 44),
+                pickable: false,
+                ignore: false,
+                requires: 'cat1',
+                endDialog: '\n   To the moon \n    and beyond!',
+                endDialogInverted: true,
+                dialogPortrait: 'babycat-portrait.png',
+                preventRemoval: true,
+                doneFn: () => {
+                    nailedIt = true;
+                }
+            }));
+    
+            objects.find((o) => o.name === 'cat').setDone();
+    
+            objects.push(new GameObject({
+                name: 'cat1',
+                img: 'cat-left.png',
+                boundingBox: new Rectangle(-307, -106, 56, 66),
+                pickable: true,
+                hud: 'hud_caty.png',
+                dialogs: ['\n  We ready fam?    '],
+                endDialogInverted: true,
+                dialogPortrait: 'baby-portrait.png',
+            }));
+        }
+    }
 
     let circleRadius = 15;
     let loadingX = 500;
@@ -28,87 +79,8 @@ export function Game() {
         unloaded = false;
 
         dialogs.push(...intro.map(d => new Dialog(d)));
-        objects.push(...objs.map(o => new GameObject(o)));
-
-        objects.push(new GameObject({
-            img: 'drying-rack-box.png',
-            boundingBox: new Rectangle(-516, -249, 121, 218),
-            interactableBoundingBox: new Rectangle(-516, -249 + 69, 117, 80),
-            requires: objects[1],
-            pickable: false,
-            dialogs: [
-                "   Who the hell\n leaves a toolbox \n on a drying rack?!",
-                "    An oddly \n   inconvenient\nplace for a box...",
-                "     I wonder \n  what's inside..."
-            ],
-            endDialog: " \n   Great success!",
-            endDialogInverted: true,
-            dialogPortrait: 'baby-portrait.png',
-            doneFn: () => {
-                objects.push(new GameObject({
-                    img: 'drying-rack-cut.png',
-                    boundingBox: new Rectangle(-516, -249, 121, 218),
-                    pickable: false,
-                    ignore: true,
-                }));
-
-                objects.push(new GameObject({
-                    name: 'hammer',
-                    img: 'hammer.png',
-                    boundingBox: new Rectangle(-424, -87, 36, 24),
-                    pickable: true,
-                    hud: 'hud_hammer.png',
-                    dialogs: ['    One baby \n  One hammer... \n   huehuehue'],
-                    endDialogInverted: true,
-                    dialogPortrait: 'baby-portrait.png',
-                }));
-            }
-        }));
-
-        objects.push(GameObject({
-            img: 'swing.png',
-            boundingBox: new Rectangle(-83, -485, 266, 236),
-            interactableBoundingBox: new Rectangle(-83 + 90, -485 + 120, 88, 65),
-            pickable: false,
-            requires: 'hammer',
-            dialogs: [
-                'Dad says he likes\nto swing but he\nnever plays with\nit... IDK',
-                '\nHow do I turn this\ninto a rocket?...',
-                'Nice elastic ropes, \n  but they need a\n  small boost...'
-            ],
-            endDialog: "\n     Nailed it! \n    Literally...",
-            endDialogInverted: true,
-            dialogPortrait: 'baby-portrait.png',
-            doneFn: () => {
-                objects.push(new GameObject({
-                    img: 'swing-big.png',
-                    boundingBox: new Rectangle(-83, -485, 261, 757),
-                    interactableBoundingBox: new Rectangle(-83 + 93, -485 + 713, 80, 44),
-                    pickable: false,
-                    ignore: false,
-                    requires: 'cat1',
-                    endDialog: '\n   To the moon \n    and beyond!',
-                    endDialogInverted: true,
-                    dialogPortrait: 'babycat-portrait.png',
-                    preventRemoval: true,
-                    doneFn: () => {
-                        nailedIt = true;
-                    }
-                }));
-
-                objects.find((o) => o.name === 'cat').setDone();
-
-                objects.push(new GameObject({
-                    name: 'cat1',
-                    img: 'cat-left.png',
-                    boundingBox: new Rectangle(-307, -106, 56, 66),
-                    pickable: true,
-                    hud: 'hud_caty.png',
-                    dialogs: ['\n  We ready fam?    '],
-                    endDialogInverted: true,
-                    dialogPortrait: 'baby-portrait.png',
-                }));
-            }
+        objects.push(...objs.map(o => {
+            return new GameObject({ ...o, doneFn: o.doneFn ? doneFns[o.doneFn] : null })
         }));
 
         hud = new HUD();

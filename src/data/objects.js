@@ -9,6 +9,7 @@ export const objs = [
         dialogPortrait: 'baby-portrait.png',
     },
     {
+        name: 'scissors',
         img: 'scissors.png',
         boundingBox: new Rectangle(538, -233, 53, 69),
         requires: 1,
@@ -82,5 +83,37 @@ export const objs = [
         boundingBox: new Rectangle(-1068, -101, 1025, 857),
         ignore: true,
         pickable: false,
+    },
+    {
+        img: 'drying-rack-box.png',
+        boundingBox: new Rectangle(-516, -249, 121, 218),
+        interactableBoundingBox: new Rectangle(-516, -249 + 69, 117, 80),
+        requires: 'scissors',
+        pickable: false,
+        dialogs: [
+            "   Who the hell\n leaves a toolbox \n on a drying rack?!",
+            "    An oddly \n   inconvenient\nplace for a box...",
+            "     I wonder \n  what's inside..."
+        ],
+        endDialog: " \n   Great success!",
+        endDialogInverted: true,
+        dialogPortrait: 'baby-portrait.png',
+        doneFn: 'rackDone'
+    },
+    {
+        img: 'swing.png',
+        boundingBox: new Rectangle(-83, -485, 266, 236),
+        interactableBoundingBox: new Rectangle(-83 + 90, -485 + 120, 88, 65),
+        pickable: false,
+        requires: 'hammer',
+        dialogs: [
+            'Dad says he likes\nto swing but he\nnever plays with\nit... IDK',
+            '\nHow do I turn this\ninto a rocket?...',
+            'Nice elastic ropes, \n  but they need a\n  small boost...'
+        ],
+        endDialog: "\n     Nailed it! \n    Literally...",
+        endDialogInverted: true,
+        dialogPortrait: 'baby-portrait.png',
+        doneFn: 'swingDone'
     }
 ]

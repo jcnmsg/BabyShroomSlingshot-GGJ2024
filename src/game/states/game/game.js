@@ -238,7 +238,7 @@ export function Game() {
                 }
             }
 
-            if (movementPos) {
+            if (movementPos && !triggeredDialog) {
                 if (circleRadius > 0) circleRadius--;
 
                 const speed = 2;

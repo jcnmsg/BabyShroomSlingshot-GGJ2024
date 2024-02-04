@@ -74,18 +74,14 @@ export function Game() {
         cursor = globalThis.res.load('img', 'cursor.png');
         cursorClicking = globalThis.res.load('img', 'cursor_clicking.png');
         player = new Player();
+        hud = new HUD();
         camera = new Camera2D(new Vector2(480 / 2.0, 270 / 2.0), new Vector2(player.x + 20.0, player.y + 20.0), 0, 1)
         bg = globalThis.res.load('img', 'bg.png');
         unloaded = false;
+        loading = true;
 
         dialogs.push(...intro.map(d => new Dialog(d)));
-        objects.push(...objs.map(o => {
-            return new GameObject({ ...o, doneFn: o.doneFn ? doneFns[o.doneFn] : null })
-        }));
-
-        hud = new HUD();
-
-        loading = true;
+        objects.push(...objs.map(o => new GameObject({ ...o, doneFn: o.doneFn ? doneFns[o.doneFn] : null })));
 
         callback();
     }
